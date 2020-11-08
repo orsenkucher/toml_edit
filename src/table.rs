@@ -11,8 +11,8 @@ use linked_hash_map::LinkedHashMap;
 #[derive(Clone, Debug, Default)]
 pub struct Table {
     pub(crate) items: KeyValuePairs,
-    // comments/spaces before and after the header
-    pub(crate) decor: Decor,
+    /// comments/spaces before and after the header
+    pub decor: Decor,
     // whether to hide an empty table
     pub(crate) implicit: bool,
     // used for putting tables back in their original order when serialising.
