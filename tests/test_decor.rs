@@ -30,3 +30,23 @@ fn key_decor() -> Result<(), Box<dyn Error>> {
     assert_eq!(value.suffix(), " # config name");
     Ok(())
 }
+
+#[test]
+fn modify() -> Result<(), Box<dyn Error>> {
+    let input = fs::read_to_string("tests/fixtures/decor/comment.toml")?;
+    let mut doc = input.parse::<Document>()?;
+    let author = doc["data"]["author"].as_value_mut().unwrap();
+    author.mutate("<\"orsenkucher\">".into());
+    let (key, value) = doc["data"]
+        .as_table()
+        .unwrap()
+        .get_kv("author")
+        .unwrap()
+        .decor()
+        .unwrap();
+
+    assert_eq!(key.prefix(), "# in-between comment\n");
+    assert_eq!(value.suffix(), " # my name");
+    assert_eq!(doc["data"]["author"].as_str(), Some("<\"orsenkucher\">"));
+    Ok(())
+}

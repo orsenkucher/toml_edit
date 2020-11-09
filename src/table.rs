@@ -55,6 +55,7 @@ impl TableKeyValue {
 }
 
 impl TableKeyValue {
+    /// Returns references to key/value pair decorations.
     pub fn decor(&self) -> Option<(&Decor, &Decor)> {
         match &self.value {
             Item::Value(v) => Some((&self.key.decor, v.decor())),

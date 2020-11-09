@@ -500,6 +500,12 @@ impl Value {
             Value::InlineTable(ref t) => &t.decor,
         }
     }
+
+    /// Mutates value preserving decoration
+    pub fn mutate(&mut self, value: Value) {
+        let decor = self.decor();
+        *self = super::decorated(value, decor.prefix(), decor.suffix());
+    }
 }
 
 pub(crate) fn sort_key_value_pairs(items: &mut LinkedHashMap<InternalString, TableKeyValue>) {
