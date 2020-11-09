@@ -41,7 +41,6 @@ impl Default for Item {
     }
 }
 
-// TODO: make pub(crate)
 #[doc(hidden)]
 #[derive(Debug, Clone)]
 pub struct TableKeyValue {
@@ -52,6 +51,16 @@ pub struct TableKeyValue {
 impl TableKeyValue {
     pub(crate) fn new(key: Repr, value: Item) -> Self {
         TableKeyValue { key, value }
+    }
+}
+
+impl TableKeyValue {
+    pub fn decor(&self) -> Option<(&Decor, &Decor)> {
+        match &self.value {
+            Item::Value(v) => Some((&self.key.decor, v.decor())),
+            Item::Table(t) => Some((&self.key.decor, &t.decor)),
+            Item::ArrayOfTables(_) | Item::None => None,
+        }
     }
 }
 
@@ -164,6 +173,11 @@ impl Table {
     /// Returns an optional reference to an item given the key.
     pub fn get<'a>(&'a self, key: &str) -> Option<&'a Item> {
         self.items.get(key).map(|kv| &kv.value)
+    }
+
+    /// Returns an optional reference to a kv entry.
+    pub fn get_kv<'a>(&'a self, key: &str) -> Option<&'a TableKeyValue> {
+        self.items.get(key)
     }
 
     /// If a table has no key/value pairs and implicit, it will not be displayed.
