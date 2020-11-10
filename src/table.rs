@@ -63,6 +63,16 @@ impl TableKeyValue {
             Item::ArrayOfTables(_) | Item::None => None,
         }
     }
+
+    /// Returns reference to a value.
+    pub fn value(&self) -> &Item {
+        &self.value
+    }
+
+    /// Returns mutable reference to a value.
+    pub fn value_mut(&mut self) -> &mut Item {
+        &mut self.value
+    }
 }
 
 /// An iterator type over `Table`'s key/value pairs.
