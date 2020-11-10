@@ -69,7 +69,7 @@ impl TableKeyValue {
 pub type Iter<'a> = Box<dyn Iterator<Item = (&'a str, &'a Item)> + 'a>;
 
 /// An iterator type over `Table`'s key/value pairs.
-pub type IterKV<'a> = Box<dyn Iterator<Item = &'a TableKeyValue> + 'a>;
+pub type IterKV<'a> = Box<dyn Iterator<Item = (&'a str, &'a TableKeyValue)> + 'a>;
 
 impl Table {
     /// Creates an empty table.
@@ -135,7 +135,7 @@ impl Table {
 
     /// Returns an iterator over all Table KeyValues
     pub fn iter_kv(&self) -> IterKV<'_> {
-        Box::new(self.items.iter().map(|(_, kv)| kv))
+        Box::new(self.items.iter().map(|(key, kv)| (&key[..], kv)))
     }
 
     /// Removes an item given the key.
