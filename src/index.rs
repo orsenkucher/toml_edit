@@ -60,6 +60,7 @@ impl Index for str {
             Item::Value(ref v) if v.is_inline_table() => v
                 .as_inline_table()
                 .and_then(|t| t.items.get(self).map(|kv| &kv.value)),
+            Item::ArrayOfTables(_) => self.parse::<usize>().unwrap().index(v),
             _ => None,
         }
     }
@@ -69,6 +70,9 @@ impl Index for str {
             t.items
                 .insert(self.to_owned(), to_table_key_value(self, Item::None));
             *v = value(Value::InlineTable(t));
+        }
+        if let Item::ArrayOfTables(_) = *v {
+            return self.parse::<usize>().unwrap().index_or_insert(v);
         }
         match *v {
             Item::Table(ref mut t) => t.entry(self).or_insert(Item::None),
