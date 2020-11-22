@@ -72,10 +72,9 @@ impl Index for str {
             *v = value(Value::InlineTable(t));
         }
         if let Item::ArrayOfTables(_) = *v {
-            return self
-                .parse::<usize>()
-                .expect(&format!("can't parse {}", self))
-                .index_or_insert(v);
+            if let Ok(index) = self.parse::<usize>() {
+                return index.index_or_insert(v);
+            }
         }
         match *v {
             Item::Table(ref mut t) => t.entry(self).or_insert(Item::None),
