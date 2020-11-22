@@ -60,7 +60,7 @@ impl Index for str {
             Item::Value(ref v) if v.is_inline_table() => v
                 .as_inline_table()
                 .and_then(|t| t.items.get(self).map(|kv| &kv.value)),
-            Item::ArrayOfTables(_) => self.parse::<usize>().unwrap().index(v),
+            Item::ArrayOfTables(_) => self.parse::<usize>().map(|i| i.index(v)).unwrap_or(None),
             _ => None,
         }
     }
