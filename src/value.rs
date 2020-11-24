@@ -509,8 +509,7 @@ impl Value {
 
     /// Mutates value without decoration
     pub fn mutate_without_decor(&mut self, value: Value) {
-        let decor = Decor::default();
-        *self = super::decorated(value, decor.prefix(), decor.suffix());
+        *self = super::decorated(value, " ", "");
     }
 }
 
